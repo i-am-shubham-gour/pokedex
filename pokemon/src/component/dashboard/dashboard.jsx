@@ -1,12 +1,15 @@
 import {
   Avatar,
+  Button,
   CircularProgress,
+  IconButton,
   InputAdornment,
   TextField,
 } from "@mui/material";
 import "./dashboard.scss";
 import axios from "axios";
-import { Fragment, useEffect, useMemo, useState } from "react";
+import _ from "lodash";
+import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import { Pokedex } from "./pokedex/pokedex";
 import SearchIcon from "@mui/icons-material/Search";
 
@@ -36,25 +39,30 @@ const checkColor = {
 
 export const Dashboard = () => {
   const [data, setData] = useState([]);
-  const [filterData, setFilterData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [search, SetSearch] = useState("");
+  const [loadMore, setLoadMore] = useState(false);
+  const [perPage, setPerPage] = useState(8);
 
-  useEffect(() => {
+  const fetchApi = (value = "", page = 1) => {
     setLoading(true);
 
     axios
-      .get(`/pokemon?per_page=${10}`)
+      .get(`pokemon?per_page=${8}&q=${value}&page=${page}`)
       .then((resp) => {
         setData(resp.data.data);
-        setFilterData(resp.data.data);
+
         setLoading(false);
       })
       .catch((err) => {
         setData([]);
-        setFilterData([]);
+
         setLoading(false);
       });
+  };
+
+  useEffect(() => {
+    fetchApi();
   }, []);
 
   const assignColor = (value) => {
@@ -66,31 +74,48 @@ export const Dashboard = () => {
     return isAssing;
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const debounceFunc = useCallback(_.debounce(fetchApi, 500), []);
+
   const handleSearch = (e) => {
     const value = e.target.value;
     SetSearch(value);
+    debounceFunc(value);
   };
 
-  const filterDatas = search
-    ? data.filter((item) =>
-        item.name.english.toLowerCase().includes(search.toLowerCase())
-      )
-    : filterData;
+  const handleLoadMore = useCallback(() => {
+    setLoadMore(true);
+    axios
+      .get(`pokemon?per_page=${perPage + 8}&q=${""}&page=${1}`)
+      .then((resp) => {
+        setData(resp.data.data);
+
+        setLoadMore(false);
+        setPerPage((prev) => prev + 8);
+      })
+      .catch(() => {
+        setData([]);
+        setLoadMore(false);
+      });
+  }, [perPage]);
 
   return (
     <div className="dashboard-container">
       <div className="header">
         <div className="title">Pokedex</div>
         <div className="profile">
-          <Avatar className="avatar">J</Avatar>
+         <IconButton>
+         <Avatar alt="User" />
+         </IconButton>
         </div>
       </div>
       <div className="dashboard-content">
         <div className="search-box">
           <TextField
             className="search-field"
-            placeholder="search by name"
+            placeholder="Search by name"
             autoComplete="off"
+            value={search}
             onChange={handleSearch}
             slotProps={{
               input: {
@@ -105,12 +130,14 @@ export const Dashboard = () => {
         </div>
         <div className="cards">
           {loading ? (
-            <CircularProgress size={30} />
+            <div className="loader">
+              <CircularProgress size={30} />
+            </div>
           ) : (
             <>
-              {Array.isArray(filterDatas) &&
-                filterDatas.length > 0 &&
-                filterDatas.map((item) => (
+              {Array.isArray(data) &&
+                data.length > 0 &&
+                data.map((item) => (
                   <Pokedex
                     key={item.id}
                     count={item.id}
@@ -123,6 +150,16 @@ export const Dashboard = () => {
             </>
           )}
         </div>
+        {Array.isArray(data) && data.length > 0 && (
+          <Button
+            className="loader-button"
+            loading={loadMore}
+            variant="contained"
+            onClick={handleLoadMore}
+          >
+            Load More
+          </Button>
+        )}
       </div>
     </div>
   );

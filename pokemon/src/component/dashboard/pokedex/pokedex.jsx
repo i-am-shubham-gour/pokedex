@@ -1,7 +1,6 @@
 import "./pokedex.scss";
 
 export const Pokedex = ({
-  background = "",
   img = "",
   count = 1,
   name = "",
@@ -13,7 +12,7 @@ export const Pokedex = ({
       <div className="title">
         <span>{count}</span>
       </div>
-      <img className="pokemon-img" src={img} />
+      <img className="pokemon-img" src={img} alt={name} />
       <div className="desc">
         <div className="name" style={{ "--color": typeColor[0] }}>
           {name}
@@ -22,7 +21,7 @@ export const Pokedex = ({
           {Array.isArray(type) &&
             type.length > 0 &&
             type.map((item, i) => (
-              <Type key={i} value={item} typeColor={typeColor} />
+              <Type key={i} value={item} typeColor={typeColor} i={i} />
             ))}
         </div>
       </div>
@@ -30,9 +29,9 @@ export const Pokedex = ({
   );
 };
 
-const Type = ({ value, typeColor }) => {
+const Type = ({ value, typeColor, i }) => {
   return (
-    <div className="type-box" style={{ "--color": typeColor }}>
+    <div className="type-box" style={{ "--background": typeColor[i] }}>
       {value}
     </div>
   );

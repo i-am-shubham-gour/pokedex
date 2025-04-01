@@ -50,7 +50,7 @@ div.card-box {
       gap: 0.5em;
 
       > div.type-box {
-        background-color: green;
+        background-color: var(--background);
         border-radius: 0.7em;
         font-size: 0.8em;
         padding: 0.1em 0.4em;

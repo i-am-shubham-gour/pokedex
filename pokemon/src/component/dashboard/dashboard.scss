@@ -14,14 +14,16 @@ div.dashboard-container {
     > div.title {
       display: flex;
       width: 50%;
-      justify-content: center;
+      justify-content: start;
       color: white;
+      padding-left: 1em;
     }
 
     > div.profile {
       display: flex;
       width: 50%;
-      justify-content: center;
+      justify-content: end;
+      padding-right: 1em;
 
       > div.avatar {
         width: 1.5em;
@@ -41,7 +43,7 @@ div.dashboard-container {
       padding-right: 0em;
       display: flex;
       flex-direction: column;
-      width: 50%;
+      width: 65%;
       align-items: end;
 
       > div.search-field {
@@ -61,10 +63,22 @@ div.dashboard-container {
       display: flex;
       width: 70%;
       justify-content: center;
-      min-height: 30em;
+      min-height: 25em;
       flex-wrap: wrap;
       gap: 1.2em;
       padding: 1em;
+
+      > div.loader {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
+
+    > button.loader-button {
+      &.MuiButton-contained {
+        background-color: #f34d61;
+      }
     }
   }
 }
