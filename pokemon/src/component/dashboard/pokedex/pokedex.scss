@@ -1,0 +1,61 @@
+div.card-box {
+  display: flex;
+  flex-direction: column;
+  max-height: 14em;
+  width: 12em;
+  max-width: 12em;
+  border-radius: 0.5em;
+  overflow: hidden;
+  background-color: var(--background);
+  position: relative;
+  height: 12em;
+
+  > img.pokemon-img {
+    width: 5em;
+    object-fit: contain;
+    position: absolute;
+    left: 3.5em;
+    top: 2em;
+  }
+
+  > div.title {
+    display: flex;
+    flex: 1;
+    justify-content: end;
+
+    > span {
+      padding: 0.5em;
+      color: white;
+      font-weight: 600;
+    }
+  }
+
+  > div.desc {
+    display: flex;
+    flex: 1;
+    margin: 0.2em;
+    border-radius: 0.5em;
+    background-color: white;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 0.5em;
+
+    > div.name {
+      color: var(--color);
+    }
+
+    > div.type {
+      display: flex;
+      gap: 0.5em;
+
+      > div.type-box {
+        background-color: green;
+        border-radius: 0.7em;
+        font-size: 0.8em;
+        padding: 0.1em 0.4em;
+        color: white;
+      }
+    }
+  }
+}

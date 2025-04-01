@@ -1,0 +1,70 @@
+div.dashboard-container {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+
+  > div.header {
+    background-color: #f34d61;
+    display: flex;
+    flex: 1 1 1px;
+    height: 2.5em;
+    align-items: center;
+    padding: 0.2em;
+
+    > div.title {
+      display: flex;
+      width: 50%;
+      justify-content: center;
+      color: white;
+    }
+
+    > div.profile {
+      display: flex;
+      width: 50%;
+      justify-content: center;
+
+      > div.avatar {
+        width: 1.5em;
+        height: 1.5em;
+      }
+    }
+  }
+
+  > div.dashboard-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    > div.search-box {
+      padding: 1em;
+      padding-right: 0em;
+      display: flex;
+      flex-direction: column;
+      width: 50%;
+      align-items: end;
+
+      > div.search-field {
+        display: flex;
+        justify-content: end;
+
+        > div.MuiInputBase-root {
+          > input {
+            padding: 0.2em 0.5em;
+            font-size: 0.9em;
+          }
+        }
+      }
+    }
+
+    > div.cards {
+      display: flex;
+      width: 70%;
+      justify-content: center;
+      min-height: 30em;
+      flex-wrap: wrap;
+      gap: 1.2em;
+      padding: 1em;
+    }
+  }
+}
