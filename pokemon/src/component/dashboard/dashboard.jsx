@@ -12,6 +12,7 @@ import _ from "lodash";
 import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import { Pokedex } from "./pokedex/pokedex";
 import SearchIcon from "@mui/icons-material/Search";
+import axiosInstance from "../../utils/axiosConfig";
 
 const checkColor = {
   Normal: "#929da3",
@@ -39,7 +40,7 @@ const checkColor = {
 
 export const Dashboard = () => {
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [search, SetSearch] = useState("");
   const [loadMore, setLoadMore] = useState(false);
   const [perPage, setPerPage] = useState(8);
@@ -47,16 +48,15 @@ export const Dashboard = () => {
   const fetchApi = (value = "", page = 1) => {
     setLoading(true);
 
-    axios
+    axiosInstance
       .get(`pokemon?per_page=${8}&q=${value}&page=${page}`)
       .then((resp) => {
         setData(resp.data.data);
-
-        setLoading(false);
       })
       .catch((err) => {
         setData([]);
-
+      })
+      .finally(() => {
         setLoading(false);
       });
   };
@@ -78,6 +78,7 @@ export const Dashboard = () => {
   const debounceFunc = useCallback(_.debounce(fetchApi, 500), []);
 
   const handleSearch = (e) => {
+    setLoading(true);
     const value = e.target.value;
     SetSearch(value);
     debounceFunc(value);
@@ -85,7 +86,7 @@ export const Dashboard = () => {
 
   const handleLoadMore = useCallback(() => {
     setLoadMore(true);
-    axios
+    axiosInstance
       .get(`pokemon?per_page=${perPage + 8}&q=${""}&page=${1}`)
       .then((resp) => {
         setData(resp.data.data);
@@ -104,9 +105,9 @@ export const Dashboard = () => {
       <div className="header">
         <div className="title">Pokedex</div>
         <div className="profile">
-         <IconButton>
-         <Avatar alt="User" />
-         </IconButton>
+          <IconButton>
+            <Avatar alt="User" />
+          </IconButton>
         </div>
       </div>
       <div className="dashboard-content">
@@ -135,8 +136,7 @@ export const Dashboard = () => {
             </div>
           ) : (
             <>
-              {Array.isArray(data) &&
-                data.length > 0 &&
+              {Array.isArray(data) && data.length > 0 ? (
                 data.map((item) => (
                   <Pokedex
                     key={item.id}
@@ -146,7 +146,10 @@ export const Dashboard = () => {
                     type={item.type}
                     typeColor={assignColor(item.type)}
                   />
-                ))}
+                ))
+              ) : (
+                <div>No Data Available</div>
+              )}
             </>
           )}
         </div>

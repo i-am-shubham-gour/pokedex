@@ -51,6 +51,7 @@ div.login-container {
           display: flex;
           flex-direction: column;
           gap: 1em;
+          align-items: center;
 
           > div.field {
             > div.MuiInputBase-root {
@@ -63,6 +64,7 @@ div.login-container {
           > button.login-button {
             &.MuiButton-contained {
               background-color: #f34d61;
+              width: 66%;
             }
           }
         }

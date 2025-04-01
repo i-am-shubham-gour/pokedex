@@ -1,37 +1,36 @@
 import { Button, CircularProgress } from "@mui/material";
-import "./login.scss";
 import TextField from "@mui/material/TextField";
 import { useCallback, useState } from "react";
-import axios from "axios";
-import { useAuthContext } from "../../authContentAPi/authContentApi";
 import { useNavigate } from "react-router-dom";
+import axiosInstance from "../../../utils/axiosConfig";
+import "./login.scss";
 
 export const Login = () => {
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
   const [loading, setLoading] = useState(false);
-  const { submitUser, user } = useAuthContext();
   const navigate = useNavigate();
 
   const handleSubmit = useCallback(
     (e) => {
       e.preventDefault();
       setLoading(true);
-      axios
+      axiosInstance
         .post("/user/login", {
           email,
           password: pass,
         })
         .then((resp) => {
-          submitUser(resp.data);
+          const token = resp.data.token;
+          sessionStorage.setItem("token", token);
         })
         .catch((err) => {})
         .finally(() => {
-          setLoading(false);
           navigate("/");
+          setLoading(false);
         });
     },
-    [email, navigate, pass, submitUser]
+    [email, navigate, pass]
   );
 
   return (

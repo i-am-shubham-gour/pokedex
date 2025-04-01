@@ -1,14 +1,11 @@
-import { Pages } from "./component/pages";
 import "./App.scss";
-import { AuthContextProvider } from "./component/authContentAPi/authContentApi";
-import { axiosConfig } from "./axiosConfig";
+import { Pages } from "./component/pages";
 
 function App() {
-  axiosConfig();
   return (
-    <AuthContextProvider>
+    <>
       <Pages />
-    </AuthContextProvider>
+    </>
   );
 }
 

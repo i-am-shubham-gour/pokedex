@@ -4,13 +4,13 @@ import { Outlet, useNavigate } from "react-router-dom";
 export const PrivateRoute = ({ children }) => {
   const navigate = useNavigate();
 
-  const user = JSON.parse(sessionStorage.getItem("user"));
+  const token = sessionStorage.getItem("token");
 
   useEffect(() => {
-    if (!user?.token) navigate("/auth");
+    if (!token) navigate("/auth");
   });
 
-  if (user?.token) {
+  if (token) {
     return <Outlet>{children}</Outlet>;
   }
 };
